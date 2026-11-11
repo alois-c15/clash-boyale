@@ -1,6 +1,6 @@
 from entite import Entite, EQUIPE_1, EQUIPE_2
 
-from pygame import Vector2, Surface, Color
+from pygame import Surface, Color
 import pygame
 
 class Batiment(Entite):

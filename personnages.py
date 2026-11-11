@@ -5,8 +5,6 @@ import pygame
 
 import time
 
-import entite
-
 class Personnage(Entite):
     def __init__(self, nom: str, taille: int, pv_max: int, equipe: int, vitesse: int, degats: int, portee: int, duree_attaque: float) -> None:
         super().__init__(nom, taille, pv_max, equipe)

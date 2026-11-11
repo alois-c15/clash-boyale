@@ -1,8 +1,9 @@
 from grille import Grille
 from entite import Entite, EQUIPE_1, EQUIPE_2
 from personnages import Personnage
+from batiments import Batiment
 
-from pygame import Surface, Color
+from pygame import Surface, Color, Vector2
 import pygame
 
 pygame.init()
@@ -16,7 +17,14 @@ grille = Grille(32, 18, 40)
 entites: list[Entite] = []
 
 def start():
-    pass
+    tour_equipe_1 = Batiment("TourEquipe1", 120, 500, EQUIPE_1)
+    tour_equipe_1.position = Vector2(120, 360)
+
+    tour_equipe_2 = Batiment("TourEquipe2", 120, 500, EQUIPE_2)
+    tour_equipe_2.position = Vector2(1160, 360)
+
+    entites.append(tour_equipe_1)
+    entites.append(tour_equipe_2)
 
 def update(t: float):
     grille.update()

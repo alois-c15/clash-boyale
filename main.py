@@ -33,6 +33,9 @@ def update(t: float):
     grille.dessiner(screen)
 
     for entite in entites:
+        if isinstance(entite, Personnage):
+            entite.update_ia(entites, t)
+
         entite.dessiner(screen)
 
 def on_event(e: pygame.Event):

@@ -3,11 +3,16 @@ from entite import Entite
 from pygame import Vector2, Surface
 import pygame
 
+import time
+
 class Personnage(Entite):
     def __init__(self, nom: str) -> None:
         super().__init__(nom)
 
         self.cible: Entite | None = None
+
+        self.debut_attaque = -1
+        self.en_train_dattaquer = False
 
     def update_ia(self, entites: list[Entite], t: float) -> None:
         if not self.cible:
@@ -38,8 +43,21 @@ class Personnage(Entite):
         direction = self.cible.position - self.position
         distance = direction.length()
 
-        if distance > 30: # 15 + 15, self.taille + cible.taille
+        if distance > 30 + 5: # 15 + 15, self.taille + cible.taille + distance_attaque
             self.position += direction.normalize() * 75 * t
+        else:
+            if not self.en_train_dattaquer:
+                self.en_train_dattaquer = True
+                self.debut_attaque = time.time()
+                return
+
+            if time.time() - self.debut_attaque < 1:
+                return
+
+            print(self.nom, "attaque", self.cible.nom)
+
+            self.en_train_dattaquer = False
+            self.debut_attaque = -1
 
     def dessiner(self, surface: Surface) -> None:
         pygame.draw.circle(surface, "white", self.position, 15)

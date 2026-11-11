@@ -64,28 +64,33 @@ class Personnage(Entite):
             self.cible = cible_plus_proche
 
     def _attaquer_cible(self, t: float) -> None:
-        if not self.cible: return
+        if not self.cible:
+            self.en_train_dattaquer = False
+            return
 
-        direction = self.cible.position - self.position
-        distance = direction.length()
+        distance = self.position.distance_to(self.cible.position)
+        portee = self.taille // 2 + self.cible.taille // 2 + self.portee
 
-        if distance <= self.taille // 2 + self.cible.taille // 2 + self.portee:
-            if not self.en_train_dattaquer:
-                self.en_train_dattaquer = True
-                self.debut_attaque = time.time()
+        if distance > portee:
+            self.en_train_dattaquer = False
+            self.debut_attaque = -1
+            return
 
-        if not self.en_train_dattaquer: return
+        if not self.en_train_dattaquer:
+            self.en_train_dattaquer = True
+            self.debut_attaque = time.time()
+            return
 
         if time.time() - self.debut_attaque < self.duree_attaque:
             return
 
-        distance = self.position.distance_to(self.cible.position)
-        if distance > self.taille // 2 + self.cible.taille // 2 + self.portee:
-            self.en_train_dattaquer = False
-            return
-
         if not self.cible.est_vivant():
             self.cible = None
+            self.en_train_dattaquer = False
+            self.debut_attaque = -1
+            return
+
+        if distance > portee:
             self.en_train_dattaquer = False
             return
 
@@ -95,8 +100,7 @@ class Personnage(Entite):
         if not self.cible.est_vivant():
             self.cible = None
 
-        self.en_train_dattaquer = False
-        self.debut_attaque = -1
+        self.debut_attaque = time.time()
 
     def _calculer_separation(self, entites: list[Entite]) -> Vector2:
         force = Vector2()
@@ -119,19 +123,24 @@ class Personnage(Entite):
 
         return force
 
-
     def prendre_degats(self, origine: "Entite", degats: int) -> None:
         super().prendre_degats(origine, degats)
 
         if not self.cible:
             self.cible = origine
+            return
 
         if self.cible == origine: return
 
         distance_origine = self.position.distance_to(origine.position)
         distance_cible = self.position.distance_to(self.cible.position)
 
-        if distance_origine <= distance_cible and not self.cible.taille > origine.taille:
+        if origine.taille > self.cible.taille:
+            if distance_origine <= self.portee:
+                self.cible = origine
+                return
+
+        if distance_origine >= distance_cible:
             self.cible = origine
 
     def dessiner(self, surface: Surface) -> None:

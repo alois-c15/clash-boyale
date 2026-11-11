@@ -59,8 +59,10 @@ def on_event(e: pygame.Event):
     if e.type == pygame.QUIT:
         is_running = False
     elif e.type == pygame.MOUSEBUTTONDOWN:
+        if not e.button == 1: return
         grille.bouton_souris_actif = True
     elif e.type == pygame.MOUSEBUTTONUP:
+        if not e.button == 1: return
         grille.bouton_souris_actif = False
 
         active = grille.position_case_active()

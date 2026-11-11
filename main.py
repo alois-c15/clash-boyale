@@ -2,6 +2,7 @@ from grille import Grille
 from entite import Entite
 from personnages import Personnage
 
+from pygame import Surface, Color
 import pygame
 
 pygame.init()
@@ -22,7 +23,12 @@ def update(t: float):
 
     if grille.bouton_souris_actif:
         active = grille.position_case_active()
-        pygame.draw.circle(screen, "grey", active, 15)
+
+        overlay = Surface(screen.get_size(), pygame.SRCALPHA)
+        couleur = Color(255, 255, 255, 127)
+
+        pygame.draw.circle(overlay, couleur, active, 15)
+        screen.blit(overlay)
 
     grille.dessiner(screen)
 

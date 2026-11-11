@@ -71,6 +71,9 @@ def on_event(e: pygame.Event):
         entite = Personnage(f"{equipe}_P{len(entites) + 1}", TAILLE_PETIT, 100, equipe, 75, 15, 5, 1)
         entite.position = active
 
+        for entite_l in entites:
+            entite_l.on_entite_ajoutee(entite)
+
         entites.append(entite)
 
 start()

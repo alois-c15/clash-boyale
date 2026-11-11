@@ -42,5 +42,8 @@ class Entite:
     def est_vivant(self) -> bool:
         return self.pv > 0
 
+    def on_entite_ajoutee(self, entite: "Entite") -> None:
+        pass
+
     def dessiner(self, surface: Surface) -> None:
         pass

@@ -28,6 +28,15 @@ class Personnage(Entite):
         self._attaquer_cible(t)
         self._deplacement(entites, t)
 
+    def on_entite_ajoutee(self, entite: Entite) -> None:
+        if not self.cible or entite == self.cible or entite.equipe == self.equipe: return
+
+        distance_cible = self.position.distance_to(self.cible.position)
+        distance_entite = self.position.distance_to(entite.position)
+
+        if distance_entite < distance_cible and entite.taille >= self.cible.taille:
+            self.cible = entite
+
     def _deplacement(self, entites: list[Entite], t: float) -> None:
         if not self.cible or self.en_train_dattaquer: return
 

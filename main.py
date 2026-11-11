@@ -38,6 +38,13 @@ def update(t: float):
 
         entite.dessiner(screen)
 
+    for entite in entites:
+        if not entite.est_vivant():
+            print(entite.nom, "est mort")
+
+            entites.remove(entite)
+            del entite
+
 def on_event(e: pygame.Event):
     global is_running
 

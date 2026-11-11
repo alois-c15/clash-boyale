@@ -23,5 +23,8 @@ class Entite:
     def pv(self, valeur: int) -> None:
         self._pv = max(0, min(valeur, self.pv_max))
 
+    def est_vivant(self) -> bool:
+        return self.pv > 0
+
     def dessiner(self, surface: Surface) -> None:
         pass

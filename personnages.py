@@ -59,6 +59,9 @@ class Personnage(Entite):
             self.cible.pv -= self.degats
             print(f"pv {self.cible.nom}: {self.cible.pv}/{self.cible.pv_max}")
 
+            if not self.cible.est_vivant():
+                self.cible = None
+
             self.en_train_dattaquer = False
             self.debut_attaque = -1
 

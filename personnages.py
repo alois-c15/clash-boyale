@@ -8,4 +8,4 @@ class Personnage(Entite):
         super().__init__(nom)
 
     def dessiner(self, surface: Surface) -> None:
-        pygame.draw.circle(surface, "white", self.position, 35)
+        pygame.draw.circle(surface, "white", self.position, 15)

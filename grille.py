@@ -19,6 +19,12 @@ class Grille:
         self.case_active.x = pos_souris[0] // self.taille_case
         self.case_active.y = pos_souris[1] // self.taille_case
 
+    def position_case_active(self) -> Vector2:
+        x = self.case_active.x * self.taille_case + self.taille_case // 2
+        y = self.case_active.y * self.taille_case + self.taille_case // 2
+
+        return Vector2(x, y)
+
     def dessiner(self, surface: Surface) -> None:
         if not self.bouton_souris_actif: return
 

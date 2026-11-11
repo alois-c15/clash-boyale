@@ -21,6 +21,8 @@ class Entite:
         self._pv = pv_max
         self._pv_max = pv_max
 
+        self.origine_derniers_degats: Entite | None = None
+
     @property
     def pv_max(self) -> int:
         return self._pv_max
@@ -32,6 +34,10 @@ class Entite:
     @pv.setter
     def pv(self, valeur: int) -> None:
         self._pv = max(0, min(valeur, self.pv_max))
+
+    def prendre_degats(self, origine: "Entite", degats: int) -> None:
+        self.pv -= degats
+        self.origine_derniers_degats = origine
 
     def est_vivant(self) -> bool:
         return self.pv > 0

@@ -49,7 +49,7 @@ class Personnage(Entite):
         direction = self.cible.position - self.position
         distance = direction.length()
 
-        if distance > self.taille + self.cible.taille + self.portee:
+        if distance > self.taille // 2 + self.cible.taille // 2 + self.portee:
             self.position += direction.normalize() * self.vitesse * t
         else:
             if not self.en_train_dattaquer:
@@ -60,7 +60,7 @@ class Personnage(Entite):
             if time.time() - self.debut_attaque < self.duree_attaque:
                 return
 
-            self.cible.pv -= self.degats
+            self.cible.prendre_degats(self, self.degats)
             print(f"pv {self.cible.nom}: {self.cible.pv}/{self.cible.pv_max}")
 
             if not self.cible.est_vivant():
@@ -68,6 +68,17 @@ class Personnage(Entite):
 
             self.en_train_dattaquer = False
             self.debut_attaque = -1
+
+    def prendre_degats(self, origine: "Entite", degats: int) -> None:
+        super().prendre_degats(origine, degats)
+
+        if not self.cible or self.cible == origine: return
+
+        distance_origine = self.position.distance_to(origine.position)
+        distance_cible = self.position.distance_to(self.cible.position)
+
+        if distance_origine <= distance_cible and not self.cible.taille > origine.taille:
+            self.cible = origine
 
     def dessiner(self, surface: Surface) -> None:
         couleur = Color(255, 0, 0) if self.equipe == EQUIPE_1 else Color(0, 0, 255)

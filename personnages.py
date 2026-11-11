@@ -5,6 +5,8 @@ import pygame
 
 import time
 
+import entite
+
 class Personnage(Entite):
     def __init__(self, nom: str, taille: int, pv_max: int, equipe: int, vitesse: int, degats: int, portee: int, duree_attaque: float) -> None:
         super().__init__(nom, taille, pv_max, equipe)
@@ -25,7 +27,25 @@ class Personnage(Entite):
             self._chercher_cible(entites)
             return
 
-        self._attaquer_cible(entites, t)
+        self._attaquer_cible(t)
+        self._deplacement(entites, t)
+
+    def _deplacement(self, entites: list[Entite], t: float) -> None:
+        if not self.cible or self.en_train_dattaquer: return
+
+        direction = self.cible.position - self.position
+        distance = direction.length()
+
+        mouvement = Vector2()
+
+        if distance > self.taille // 2 + self.cible.taille // 2 + self.portee:
+            mouvement += direction.normalize()
+
+        separation = self._calculer_separation(entites)
+        deplacement = direction.normalize() + separation * 2
+
+        if deplacement.length() > 0:
+            self.position += deplacement.normalize() * self.vitesse * t
 
     def _chercher_cible(self, entites: list[Entite]) -> None:
         cible_plus_proche = None
@@ -43,52 +63,48 @@ class Personnage(Entite):
         if cible_plus_proche:
             self.cible = cible_plus_proche
 
-    def _attaquer_cible(self, entites: list[Entite], t: float) -> None:
+    def _attaquer_cible(self, t: float) -> None:
         if not self.cible: return
 
         direction = self.cible.position - self.position
         distance = direction.length()
 
-        if distance > self.taille // 2 + self.cible.taille // 2 + self.portee:
-            separation = self._calculer_separation(entites)
-            deplacement = direction.normalize() + separation * 2
-
-            if deplacement.length() > 0:
-                self.position += deplacement.normalize() * self.vitesse * t
-        else:
+        if distance <= self.taille // 2 + self.cible.taille // 2 + self.portee:
             if not self.en_train_dattaquer:
                 self.en_train_dattaquer = True
                 self.debut_attaque = time.time()
-                return
 
-            if time.time() - self.debut_attaque < self.duree_attaque:
-                return
+        if not self.en_train_dattaquer: return
 
-            distance = self.position.distance_to(self.cible.position)
-            if distance > self.taille // 2 + self.cible.taille // 2 + self.portee:
-                return
+        if time.time() - self.debut_attaque < self.duree_attaque:
+            return
 
-            if not self.cible.est_vivant():
-                self.cible = None
-                return
-
-            self.cible.prendre_degats(self, self.degats)
-            print(f"pv {self.cible.nom}: {self.cible.pv}/{self.cible.pv_max}")
-
-            if not self.cible.est_vivant():
-                self.cible = None
-
+        distance = self.position.distance_to(self.cible.position)
+        if distance > self.taille // 2 + self.cible.taille // 2 + self.portee:
             self.en_train_dattaquer = False
-            self.debut_attaque = -1
+            return
+
+        if not self.cible.est_vivant():
+            self.cible = None
+            self.en_train_dattaquer = False
+            return
+
+        self.cible.prendre_degats(self, self.degats)
+        print(f"pv {self.cible.nom}: {self.cible.pv}/{self.cible.pv_max}")
+
+        if not self.cible.est_vivant():
+            self.cible = None
+
+        self.en_train_dattaquer = False
+        self.debut_attaque = -1
 
     def _calculer_separation(self, entites: list[Entite]) -> Vector2:
         force = Vector2()
         voisins = 0
 
-
         for entite in entites:
             if entite == self: continue
-            distance_min = (self.taille + entite.taille) / 2 + self.portee
+            distance_min = ((self.taille + entite.taille) / 2 + self.portee) * 2
 
             direction = self.position - entite.position
             distance = direction.length()

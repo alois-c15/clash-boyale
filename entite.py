@@ -4,8 +4,10 @@ import pygame
 class Entite:
     position: Vector2
 
-    def __init__(self, nom: str, pv_max: int) -> None:
+    def __init__(self, nom: str, taille: int, pv_max: int) -> None:
         self.nom = nom
+        self.taille = taille
+
         self.position = Vector2()
 
         self._pv = pv_max

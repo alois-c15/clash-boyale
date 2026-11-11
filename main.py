@@ -57,7 +57,7 @@ def on_event(e: pygame.Event):
 
         active = grille.position_case_active()
 
-        entite = Personnage("Test", 100, 15)
+        entite = Personnage(f"P{len(entites) + 1}", 15, 100, 75, 15, 5, 1)
         entite.position = active
 
         entites.append(entite)

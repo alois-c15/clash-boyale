@@ -6,10 +6,14 @@ import pygame
 import time
 
 class Personnage(Entite):
-    def __init__(self, nom: str, pv_max: int, degats: int) -> None:
-        super().__init__(nom, pv_max)
+    def __init__(self, nom: str, taille: int, pv_max: int, vitesse: int, degats: int, portee: int, duree_attaque: float) -> None:
+        super().__init__(nom, taille, pv_max)
+
+        self.vitesse = vitesse
 
         self.degats = degats
+        self.portee = portee
+        self.duree_attaque = duree_attaque
 
         self.cible: Entite | None = None
 
@@ -45,15 +49,15 @@ class Personnage(Entite):
         direction = self.cible.position - self.position
         distance = direction.length()
 
-        if distance > 30 + 5: # 15 + 15, self.taille + cible.taille + distance_attaque
-            self.position += direction.normalize() * 75 * t
+        if distance > self.taille + self.cible.taille + self.portee: # 15 + 15, self.taille + cible.taille + distance_attaque
+            self.position += direction.normalize() * self.vitesse * t
         else:
             if not self.en_train_dattaquer:
                 self.en_train_dattaquer = True
                 self.debut_attaque = time.time()
                 return
 
-            if time.time() - self.debut_attaque < 1:
+            if time.time() - self.debut_attaque < self.duree_attaque:
                 return
 
             self.cible.pv -= self.degats
@@ -66,4 +70,4 @@ class Personnage(Entite):
             self.debut_attaque = -1
 
     def dessiner(self, surface: Surface) -> None:
-        pygame.draw.circle(surface, "white", self.position, 15)
+        pygame.draw.circle(surface, "white", self.position, self.taille)

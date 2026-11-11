@@ -1,3 +1,5 @@
+from grille import Grille
+
 import pygame
 
 pygame.init()
@@ -7,17 +9,24 @@ screen = pygame.display.set_mode((1280, 720))
 clock = pygame.Clock()
 is_running = True
 
+grille = Grille(32, 18, 40)
+
 def start():
     pass
 
 def update(t: float):
-    pass
+    grille.update()
+    grille.dessiner(screen)
 
 def on_event(e: pygame.Event):
     global is_running
 
     if e.type == pygame.QUIT:
         is_running = False
+    elif e.type == pygame.MOUSEBUTTONDOWN:
+        grille.bouton_souris_actif = True
+    elif e.type == pygame.MOUSEBUTTONUP:
+        grille.bouton_souris_actif = False
 
 start()
 while is_running:

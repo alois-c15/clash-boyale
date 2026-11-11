@@ -1,5 +1,4 @@
 from pygame import Vector2, Surface
-import pygame
 
 EQUIPE_1: int = 1
 EQUIPE_2: int = 2

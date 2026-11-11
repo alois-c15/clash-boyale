@@ -6,8 +6,10 @@ import pygame
 import time
 
 class Personnage(Entite):
-    def __init__(self, nom: str) -> None:
-        super().__init__(nom)
+    def __init__(self, nom: str, pv_max: int, degats: int) -> None:
+        super().__init__(nom, pv_max)
+
+        self.degats = degats
 
         self.cible: Entite | None = None
 
@@ -54,7 +56,8 @@ class Personnage(Entite):
             if time.time() - self.debut_attaque < 1:
                 return
 
-            print(self.nom, "attaque", self.cible.nom)
+            self.cible.pv -= self.degats
+            print(f"pv {self.cible.nom}: {self.cible.pv}/{self.cible.pv_max}")
 
             self.en_train_dattaquer = False
             self.debut_attaque = -1

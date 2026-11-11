@@ -4,9 +4,24 @@ import pygame
 class Entite:
     position: Vector2
 
-    def __init__(self, nom: str) -> None:
+    def __init__(self, nom: str, pv_max: int) -> None:
         self.nom = nom
         self.position = Vector2()
+
+        self._pv = pv_max
+        self._pv_max = pv_max
+
+    @property
+    def pv_max(self) -> int:
+        return self._pv_max
+
+    @property
+    def pv(self) -> int:
+        return self._pv
+
+    @pv.setter
+    def pv(self, valeur: int) -> None:
+        self._pv = max(0, min(valeur, self.pv_max))
 
     def dessiner(self, surface: Surface) -> None:
         pass

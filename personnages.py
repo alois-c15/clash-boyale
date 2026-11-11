@@ -1,6 +1,6 @@
 from entite import Entite, EQUIPE_1, EQUIPE_2
 
-from pygame import Surface, Color
+from pygame import Surface, Color, Vector2
 import pygame
 
 import time
@@ -25,7 +25,7 @@ class Personnage(Entite):
             self._chercher_cible(entites)
             return
 
-        self._attaquer_cible(t)
+        self._attaquer_cible(entites, t)
 
     def _chercher_cible(self, entites: list[Entite]) -> None:
         cible_plus_proche = None
@@ -43,14 +43,18 @@ class Personnage(Entite):
         if cible_plus_proche:
             self.cible = cible_plus_proche
 
-    def _attaquer_cible(self, t: float) -> None:
+    def _attaquer_cible(self, entites: list[Entite], t: float) -> None:
         if not self.cible: return
 
         direction = self.cible.position - self.position
         distance = direction.length()
 
         if distance > self.taille // 2 + self.cible.taille // 2 + self.portee:
-            self.position += direction.normalize() * self.vitesse * t
+            separation = self._calculer_separation(entites)
+            deplacement = direction.normalize() + separation * 2
+
+            if deplacement.length() > 0:
+                self.position += deplacement.normalize() * self.vitesse * t
         else:
             if not self.en_train_dattaquer:
                 self.en_train_dattaquer = True
@@ -68,6 +72,29 @@ class Personnage(Entite):
 
             self.en_train_dattaquer = False
             self.debut_attaque = -1
+
+    def _calculer_separation(self, entites: list[Entite]) -> Vector2:
+        force = Vector2()
+        voisins = 0
+
+
+        for entite in entites:
+            if entite == self: continue
+            distance_min = (self.taille + entite.taille) / 2 + self.portee
+
+            direction = self.position - entite.position
+            distance = direction.length()
+
+            if distance == 0 or distance >= distance_min: continue
+
+            force += direction.normalize() / distance
+            voisins += 1
+
+        if voisins > 0:
+            force /= voisins
+
+        return force
+
 
     def prendre_degats(self, origine: "Entite", degats: int) -> None:
         super().prendre_degats(origine, degats)

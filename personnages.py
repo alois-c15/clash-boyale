@@ -1,13 +1,13 @@
-from entite import Entite
+from entite import Entite, EQUIPE_1, EQUIPE_2
 
-from pygame import Vector2, Surface
+from pygame import Vector2, Surface, Color
 import pygame
 
 import time
 
 class Personnage(Entite):
-    def __init__(self, nom: str, taille: int, pv_max: int, vitesse: int, degats: int, portee: int, duree_attaque: float) -> None:
-        super().__init__(nom, taille, pv_max)
+    def __init__(self, nom: str, taille: int, pv_max: int, equipe: int, vitesse: int, degats: int, portee: int, duree_attaque: float) -> None:
+        super().__init__(nom, taille, pv_max, equipe)
 
         self.vitesse = vitesse
 
@@ -32,7 +32,7 @@ class Personnage(Entite):
         distance_plus_proche = float("inf")
 
         for entite in entites:
-            if entite == self: continue
+            if entite == self or entite.equipe == self.equipe: continue
 
             distance = self.position.distance_to(entite.position)
 
@@ -49,7 +49,7 @@ class Personnage(Entite):
         direction = self.cible.position - self.position
         distance = direction.length()
 
-        if distance > self.taille + self.cible.taille + self.portee: # 15 + 15, self.taille + cible.taille + distance_attaque
+        if distance > self.taille + self.cible.taille + self.portee:
             self.position += direction.normalize() * self.vitesse * t
         else:
             if not self.en_train_dattaquer:
@@ -70,4 +70,5 @@ class Personnage(Entite):
             self.debut_attaque = -1
 
     def dessiner(self, surface: Surface) -> None:
-        pygame.draw.circle(surface, "white", self.position, self.taille)
+        couleur = Color(255, 0, 0) if self.equipe == EQUIPE_1 else Color(0, 0, 255)
+        pygame.draw.circle(surface, couleur, self.position, self.taille)

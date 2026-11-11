@@ -1,12 +1,17 @@
 from pygame import Vector2, Surface
 import pygame
 
+EQUIPE_1: int = 1
+EQUIPE_2: int = 2
+
 class Entite:
     position: Vector2
 
-    def __init__(self, nom: str, taille: int, pv_max: int) -> None:
+    def __init__(self, nom: str, taille: int, pv_max: int, equipe: int) -> None:
         self.nom = nom
         self.taille = taille
+
+        self.equipe = equipe
 
         self.position = Vector2()
 

@@ -1,5 +1,5 @@
 from grille import Grille
-from entite import Entite
+from entite import Entite, EQUIPE_1, EQUIPE_2
 from personnages import Personnage
 
 from pygame import Surface, Color
@@ -56,9 +56,14 @@ def on_event(e: pygame.Event):
         grille.bouton_souris_actif = False
 
         active = grille.position_case_active()
+        x = int(grille.convertir_position(active).x)
 
-        entite = Personnage(f"P{len(entites) + 1}", 15, 100, 75, 15, 5, 1)
+        equipe = EQUIPE_1 if grille.calculer_cote(int(grille.convertir_position(active).x)) == -1 else EQUIPE_2
+
+        entite = Personnage(f"P{len(entites) + 1}", 15, 100, equipe, 75, 15, 5, 1)
         entite.position = active
+
+        print(entite.nom, ":", equipe)
 
         entites.append(entite)
 

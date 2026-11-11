@@ -107,7 +107,10 @@ class Personnage(Entite):
     def prendre_degats(self, origine: "Entite", degats: int) -> None:
         super().prendre_degats(origine, degats)
 
-        if not self.cible or self.cible == origine: return
+        if not self.cible:
+            self.cible = origine
+
+        if self.cible == origine: return
 
         distance_origine = self.position.distance_to(origine.position)
         distance_cible = self.position.distance_to(self.cible.position)

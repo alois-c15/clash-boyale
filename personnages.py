@@ -64,6 +64,14 @@ class Personnage(Entite):
             if time.time() - self.debut_attaque < self.duree_attaque:
                 return
 
+            distance = self.position.distance_to(self.cible.position)
+            if distance > self.taille // 2 + self.cible.taille // 2 + self.portee:
+                return
+
+            if not self.cible.est_vivant():
+                self.cible = None
+                return
+
             self.cible.prendre_degats(self, self.degats)
             print(f"pv {self.cible.nom}: {self.cible.pv}/{self.cible.pv_max}")
 

@@ -71,4 +71,4 @@ class Personnage(Entite):
 
     def dessiner(self, surface: Surface) -> None:
         couleur = Color(255, 0, 0) if self.equipe == EQUIPE_1 else Color(0, 0, 255)
-        pygame.draw.circle(surface, couleur, self.position, self.taille)
+        pygame.draw.circle(surface, couleur, self.position, self.taille // 2)

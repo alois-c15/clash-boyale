@@ -3,6 +3,10 @@ from pygame import Vector2, Surface
 EQUIPE_1: int = 1
 EQUIPE_2: int = 2
 
+TAILLE_PETIT: int = 35
+TAILLE_MOYEN: int = 75
+TAILLE_GRAND: int = 115
+
 class Entite:
     position: Vector2
 

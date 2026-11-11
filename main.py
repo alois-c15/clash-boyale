@@ -1,5 +1,5 @@
 from grille import Grille
-from entite import Entite, EQUIPE_1, EQUIPE_2
+from entite import Entite, EQUIPE_1, EQUIPE_2, TAILLE_PETIT, TAILLE_GRAND
 from personnages import Personnage
 from batiments import Batiment
 
@@ -17,10 +17,10 @@ grille = Grille(32, 18, 40)
 entites: list[Entite] = []
 
 def start():
-    tour_equipe_1 = Batiment("TourEquipe1", 120, 500, EQUIPE_1)
+    tour_equipe_1 = Batiment("TourEquipe1", TAILLE_GRAND, 500, EQUIPE_1)
     tour_equipe_1.position = Vector2(120, 360)
 
-    tour_equipe_2 = Batiment("TourEquipe2", 120, 500, EQUIPE_2)
+    tour_equipe_2 = Batiment("TourEquipe2", TAILLE_GRAND, 500, EQUIPE_2)
     tour_equipe_2.position = Vector2(1160, 360)
 
     entites.append(tour_equipe_1)
@@ -35,7 +35,7 @@ def update(t: float):
         overlay = Surface(screen.get_size(), pygame.SRCALPHA)
         couleur = Color(255, 255, 255, 170)
 
-        pygame.draw.circle(overlay, couleur, active, 15)
+        pygame.draw.circle(overlay, couleur, active, TAILLE_PETIT // 2)
         screen.blit(overlay)
 
     grille.dessiner(screen)
@@ -66,7 +66,7 @@ def on_event(e: pygame.Event):
         active = grille.position_case_active()
         equipe = EQUIPE_1 if grille.calculer_cote(int(grille.convertir_position(active).x)) == -1 else EQUIPE_2
 
-        entite = Personnage(f"P{len(entites) + 1}", 15, 100, equipe, 75, 15, 5, 1)
+        entite = Personnage(f"P{len(entites) + 1}", TAILLE_PETIT, 100, equipe, 75, 15, 5, 1)
         entite.position = active
 
         entites.append(entite)

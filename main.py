@@ -25,7 +25,7 @@ def update(t: float):
         active = grille.position_case_active()
 
         overlay = Surface(screen.get_size(), pygame.SRCALPHA)
-        couleur = Color(255, 255, 255, 127)
+        couleur = Color(255, 255, 255, 170)
 
         pygame.draw.circle(overlay, couleur, active, 15)
         screen.blit(overlay)

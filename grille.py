@@ -32,7 +32,7 @@ class Grille:
 
         for x in range(self.largeur):
             for y in range(self.hauteur):
-                alpha = 65 if x == self.case_active.x and y == self.case_active.y else 20 if (x + y) % 2 == 0 else 15
+                alpha = 75 if x == self.case_active.x and y == self.case_active.y else 10 if (x + y) % 2 == 0 else 5
                 couleur = Color(255, 255, 255,  alpha)
 
                 rect = pygame.Rect(x * self.taille_case, y * self.taille_case, self.taille_case, self.taille_case)

@@ -68,7 +68,7 @@ def on_event(e: pygame.Event):
         active = grille.position_case_active()
         equipe = EQUIPE_1 if grille.calculer_cote(int(grille.convertir_position(active).x)) == -1 else EQUIPE_2
 
-        entite = Personnage(f"{equipe}_P{len(entites) + 1}", TAILLE_PETIT, 100, equipe, 75, 15, 5, 1)
+        entite = Personnage(f"{equipe}_P{len(entites) + 1}", TAILLE_PETIT, 100, equipe, 75, 15, 15, 1)
         entite.position = active
 
         for entite_l in entites:

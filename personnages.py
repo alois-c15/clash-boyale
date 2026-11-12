@@ -45,7 +45,7 @@ class Personnage(Entite):
 
         mouvement = Vector2()
 
-        if distance > self.taille // 2 + self.cible.taille // 2 + self.portee:
+        if distance > self.taille // 2 + self.cible.taille // 2 + self.portee // 2:
             mouvement += direction.normalize()
 
         separation = self._calculer_separation(entites)
@@ -139,15 +139,15 @@ class Personnage(Entite):
 
         if self.cible == origine: return
 
-        distance_origine = self.position.distance_to(origine.position)
-        distance_cible = self.position.distance_to(self.cible.position)
+        distance_origine = self.position.distance_to(origine.position) - origine.taille
+        distance_cible = self.position.distance_to(self.cible.position) - self.cible.taille
 
         if origine.taille > self.cible.taille:
             if distance_origine <= self.portee:
                 self.cible = origine
                 return
 
-        if distance_origine >= distance_cible:
+        if distance_cible >= distance_origine and origine.taille <= self.cible.taille:
             self.cible = origine
 
     def dessiner(self, surface: Surface) -> None:

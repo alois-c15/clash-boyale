@@ -50,7 +50,6 @@ class Entite:
         position = self.position + Vector2(0, self.taille)
 
         pv = (self.pv / self.pv_max) * self.taille * 2
-        print(pv)
 
         bg = pygame.Rect(position.x - self.taille, position.y, self.taille * 2, 5)
         fill = pygame.Rect(bg.left, bg.top, pv, bg.height)

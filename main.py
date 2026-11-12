@@ -6,6 +6,8 @@ from batiments import Batiment
 from pygame import Surface, Color, Vector2
 import pygame
 
+import personnages
+
 pygame.init()
 pygame.display.set_caption("Clash Boyale")
 
@@ -13,13 +15,34 @@ screen = pygame.display.set_mode((1280, 720))
 clock = pygame.Clock()
 is_running = True
 
+font = pygame.font.SysFont(None, 26)
+
 grille = Grille(32, 18, 40)
+perso_select = 0
+
+def selection_personnage_up():
+    global perso_select
+
+    perso_select += 1
+    if perso_select > len(personnages.LISTE) - 1:
+        perso_select = 0
+
+    print(personnages.LISTE[perso_select][0])
+
+def selection_personnage_down():
+    global perso_select
+
+    perso_select -= 1
+    if perso_select < 0:
+        perso_select = len(personnages.LISTE) - 1
+
+    print(personnages.LISTE[perso_select][0])
 
 def start():
-    tour_equipe_1 = Batiment("TourEquipe1", TAILLE_GRAND, 500, EQUIPE_1)
+    tour_equipe_1 = Batiment("TourEquipe1", TAILLE_GRAND, 700, EQUIPE_1)
     tour_equipe_1.position = Vector2(120, 360)
 
-    tour_equipe_2 = Batiment("TourEquipe2", TAILLE_GRAND, 500, EQUIPE_2)
+    tour_equipe_2 = Batiment("TourEquipe2", TAILLE_GRAND, 700, EQUIPE_2)
     tour_equipe_2.position = Vector2(1160, 360)
 
     entites.append(tour_equipe_1)
@@ -53,6 +76,11 @@ def update(t: float):
             entites.remove(entite)
             del entite
 
+    pos = pygame.mouse.get_pos()
+
+    perso_texte = font.render(str(personnages.LISTE[perso_select][0]), True, Color(255, 255, 255))
+    screen.blit(perso_texte, (pos[0] + 5, pos[1] + 15))
+
 def on_event(e: pygame.Event):
     global is_running
 
@@ -61,6 +89,11 @@ def on_event(e: pygame.Event):
     elif e.type == pygame.MOUSEBUTTONDOWN:
         if not e.button == 1: return
         grille.bouton_souris_actif = True
+    elif e.type == pygame.KEYDOWN:
+        if e.key == pygame.K_e:
+            selection_personnage_up()
+        elif e.key == pygame.K_a:
+            selection_personnage_down()
     elif e.type == pygame.MOUSEBUTTONUP:
         if not e.button == 1: return
         grille.bouton_souris_actif = False
@@ -68,7 +101,10 @@ def on_event(e: pygame.Event):
         active = grille.position_case_active()
         equipe = EQUIPE_1 if grille.calculer_cote(int(grille.convertir_position(active).x)) == -1 else EQUIPE_2
 
-        entite = Personnage(f"{equipe}_P{len(entites) + 1}", TAILLE_PETIT, 100, equipe, 75, 15, 15, 1)
+        stats = personnages.LISTE[perso_select]
+        print(stats)
+
+        entite = Personnage(f"{equipe}_{stats[0]}{len(entites) + 1}", stats[1], stats[2], equipe, stats[3], stats[4], stats[5], stats[6])
         entite.position = active
 
         for entite_l in entites:

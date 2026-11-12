@@ -1,4 +1,4 @@
-from entite import Entite, EQUIPE_1, EQUIPE_2
+from entite import Entite, EQUIPE_1, EQUIPE_2, TAILLE_MOYEN, TAILLE_GRAND, TAILLE_PETIT
 import entite
 
 from pygame import Surface, Color, Vector2
@@ -6,6 +6,12 @@ import pygame
 
 import ciblage
 import time
+
+LISTE = [
+    ("Chevalier", TAILLE_MOYEN, 90, 80, 20, 20, 1.3),
+    ("Géant", TAILLE_GRAND, 260, 50, 125, 25, 2),
+    ("Gargouille", TAILLE_PETIT, 35, 95, 7, 15, 0.8)
+]
 
 class Personnage(Entite):
     def __init__(self, nom: str, taille: int, pv_max: int, equipe: int, vitesse: int, degats: int, portee: int, duree_attaque: float) -> None:

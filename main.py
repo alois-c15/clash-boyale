@@ -1,5 +1,5 @@
 from grille import Grille
-from entite import Entite, EQUIPE_1, EQUIPE_2, TAILLE_PETIT, TAILLE_GRAND
+from entite import Entite, EQUIPE_1, EQUIPE_2, TAILLE_PETIT, TAILLE_GRAND, entites
 from personnages import Personnage
 from batiments import Batiment
 
@@ -14,7 +14,6 @@ clock = pygame.Clock()
 is_running = True
 
 grille = Grille(32, 18, 40)
-entites: list[Entite] = []
 
 def start():
     tour_equipe_1 = Batiment("TourEquipe1", TAILLE_GRAND, 500, EQUIPE_1)
@@ -43,7 +42,7 @@ def update(t: float):
 
     for entite in entites:
         if isinstance(entite, Personnage):
-            entite.update_ia(entites, t)
+            entite.update_ia(t)
 
         entite.dessiner(screen)
 

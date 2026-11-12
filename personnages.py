@@ -1,8 +1,10 @@
 from entite import Entite, EQUIPE_1, EQUIPE_2
+import entite
 
 from pygame import Surface, Color, Vector2
 import pygame
 
+import ciblage
 import time
 
 class Personnage(Entite):
@@ -20,13 +22,13 @@ class Personnage(Entite):
         self.debut_attaque = -1
         self.en_train_dattaquer = False
 
-    def update_ia(self, entites: list[Entite], t: float) -> None:
+    def update_ia(self, t: float) -> None:
         if not self.cible:
-            self._chercher_cible(entites)
+            self._chercher_cible()
             return
 
         self._attaquer_cible(t)
-        self._deplacement(entites, t)
+        self._deplacement(t)
 
     def on_entite_ajoutee(self, entite: Entite) -> None:
         if not self.cible or entite == self.cible or entite.equipe == self.equipe: return
@@ -37,7 +39,7 @@ class Personnage(Entite):
         if distance_entite < distance_cible and entite.taille >= self.cible.taille:
             self.cible = entite
 
-    def _deplacement(self, entites: list[Entite], t: float) -> None:
+    def _deplacement(self, t: float) -> None:
         if not self.cible or self.en_train_dattaquer: return
 
         direction = self.cible.position - self.position
@@ -48,27 +50,15 @@ class Personnage(Entite):
         if distance > self.taille // 2 + self.cible.taille // 2 + self.portee // 2:
             mouvement += direction.normalize()
 
-        separation = self._calculer_separation(entites)
+        separation = self._calculer_separation(entite.entites)
         deplacement = direction.normalize() + separation * 2
 
         if deplacement.length() > 0:
             self.position += deplacement.normalize() * self.vitesse * t
 
-    def _chercher_cible(self, entites: list[Entite]) -> None:
-        cible_plus_proche = None
-        distance_plus_proche = float("inf")
-
-        for entite in entites:
-            if entite == self or entite.equipe == self.equipe: continue
-
-            distance = self.position.distance_to(entite.position)
-
-            if distance < distance_plus_proche:
-                cible_plus_proche = entite
-                distance_plus_proche = distance
-
-        if cible_plus_proche:
-            self.cible = cible_plus_proche
+    def _chercher_cible(self) -> None:
+        cibles = ciblage.toutes_cibles_potentielles(self)
+        self.cible = ciblage.cible_plus_proche(cibles, self.position)
 
     def _attaquer_cible(self, t: float) -> None:
         if not self.cible:

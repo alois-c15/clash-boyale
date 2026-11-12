@@ -8,6 +8,8 @@ TAILLE_PETIT: int = 35
 TAILLE_MOYEN: int = 75
 TAILLE_GRAND: int = 115
 
+entites: list["Entite"] = []
+
 class Entite:
     position: Vector2
 

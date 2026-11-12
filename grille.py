@@ -35,7 +35,15 @@ class Grille:
         """Retourne -1 si a droite, 0 si au milieu, 1 si a gauche"""
         return (x > (self.largeur - 1) / 2) - (x < (self.largeur - 1) / 2)
 
-    def dessiner(self, surface: Surface) -> None:
+    def dessiner_sol(self, surface: Surface) -> None:
+        for x in range(self.largeur):
+            for y in range(self.hauteur):
+                couleur = Color(15, 245, 17) if (x + y) % 2 == 0 else Color(7, 230, 21)
+                rect = pygame.Rect(x * self.taille_case, y * self.taille_case, self.taille_case, self.taille_case)
+
+                pygame.draw.rect(surface, couleur, rect)
+
+    def dessiner_overlay(self, surface: Surface) -> None:
         if not self.bouton_souris_actif: return
 
         overlay = Surface(surface.get_size(), pygame.SRCALPHA)

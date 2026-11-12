@@ -28,6 +28,7 @@ def start():
 
 def update(t: float):
     grille.update()
+    grille.dessiner_sol(screen)
 
     if grille.bouton_souris_actif:
         active = grille.position_case_active()
@@ -38,7 +39,7 @@ def update(t: float):
         pygame.draw.circle(overlay, couleur, active, TAILLE_PETIT // 2)
         screen.blit(overlay)
 
-    grille.dessiner(screen)
+    grille.dessiner_overlay(screen)
 
     for entite in entites:
         if isinstance(entite, Personnage):

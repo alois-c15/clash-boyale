@@ -1,4 +1,5 @@
-from pygame import Vector2, Surface
+from pygame import Vector2, Surface, Color
+import pygame
 
 EQUIPE_1: int = 1
 EQUIPE_2: int = 2
@@ -45,5 +46,19 @@ class Entite:
     def on_entite_ajoutee(self, entite: "Entite") -> None:
         pass
 
+    def _afficher_vie(self, surface: Surface) -> None:
+        position = self.position + Vector2(0, self.taille)
+
+        pv = (self.pv / self.pv_max) * self.taille * 2
+        print(pv)
+
+        bg = pygame.Rect(position.x - self.taille, position.y, self.taille * 2, 5)
+        fill = pygame.Rect(bg.left, bg.top, pv, bg.height)
+
+        couleur = Color(255, 0, 0) if self.equipe == EQUIPE_1 else Color(0, 0, 255)
+
+        pygame.draw.rect(surface, "black", bg)
+        pygame.draw.rect(surface, couleur, fill)
+
     def dessiner(self, surface: Surface) -> None:
-        pass
+        self._afficher_vie(surface)

@@ -8,6 +8,8 @@ class Batiment(Entite):
         super().__init__(nom, taille, pv_max, equipe)
 
     def dessiner(self, surface: Surface) -> None:
+        super()._afficher_vie(surface)
+
         rect = pygame.Rect(self.position.x - self.taille // 2, self.position.y - self.taille // 2, self.taille, self.taille)
         couleur = Color(255, 0, 0) if self.equipe == EQUIPE_1 else Color(0, 0, 255)
 

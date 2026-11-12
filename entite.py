@@ -49,7 +49,7 @@ class Entite:
         pass
 
     def _afficher_vie(self, surface: Surface) -> None:
-        position = self.position + Vector2(0, self.taille)
+        position = self.position + Vector2(0, self.taille // 2 + 15)
 
         pv = (self.pv / self.pv_max) * self.taille * 2
 

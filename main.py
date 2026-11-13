@@ -58,7 +58,10 @@ def update(t: float):
         overlay = Surface(screen.get_size(), pygame.SRCALPHA)
         couleur = Color(255, 255, 255, 170)
 
-        pygame.draw.circle(overlay, couleur, active, TAILLE_PETIT // 2)
+        select = personnages.LISTE[perso_select]
+        if not select: return
+
+        pygame.draw.circle(overlay, couleur, active, select[1] // 2)
         screen.blit(overlay)
 
     grille.dessiner_overlay(screen)

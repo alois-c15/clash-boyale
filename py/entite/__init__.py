@@ -13,6 +13,23 @@ class Entite:
         self.taille = taille
         self.equipe = equipe
 
+        self.pv_max = pv_max
+        self._pv = pv_max
+
+    @property
+    def pv(self) -> int:
+        return self._pv
+
+    @pv.setter
+    def pv(self, valeur: int) -> None:
+        self._pv = max(0, min(valeur, self.pv_max))
+
+    def prendre_degats(self, degats: int) -> None:
+        self.pv -= degats
+
+    def est_vivant(self) -> bool:
+        return self.pv > 0
+
     def distance_to(self, entite: "Entite") -> int:
         distance = self.position.distance_to(entite.position)
         return int(distance - (self.taille // 2 + entite.taille // 2))

@@ -29,6 +29,11 @@ def start():
 
 def update(t: float):
     for entite in entites:
+        if not entite.est_vivant():
+            entites.remove(entite)
+            del entite
+            continue
+
         if isinstance(entite, Unite):
             update_unite(entite, t)
 

@@ -2,6 +2,7 @@ from entite import Entite, Equipe
 from pygame import Surface
 
 import pygame
+import time
 
 class Unite(Entite):
     def __init__(self, equipe: Equipe, taille: int, pv_max: int, vitesse: int, degats: int, portee: int, duree_attaque: float) -> None:
@@ -13,6 +14,8 @@ class Unite(Entite):
         self.duree_attaque = duree_attaque
 
         self.cible: Entite | None = None
+        self.en_attaque = False
+        self.debut_attaque = 0
 
     def update_ciblage(self, entites: list[Entite]) -> None:
         cible_min = None
@@ -29,7 +32,6 @@ class Unite(Entite):
 
         if cible_min:
             self.cible = cible_min
-            print(self.cible)
             
 
     def update_attaque(self, t: float) -> None:
@@ -40,7 +42,19 @@ class Unite(Entite):
             direction = self.cible.position - self.position
             self.position += direction.normalize() * self.vitesse * t
         else:
-            pass
+            now = time.time()
+            if not self.en_attaque:
+                self.en_attaque = True
+                self.debut_attaque = now
+                return
+
+            if (now - self.debut_attaque < self.duree_attaque
+                or not self.cible
+                or self.distance_to(self.cible) > self.portee):
+                return
+
+            self.cible.prendre_degats(self.degats)
+            self.en_attaque = False
 
     def dessiner(self, surface: Surface) -> None:
         pygame.draw.circle(surface, self.equipe.couleur, self.position, self.taille // 2)

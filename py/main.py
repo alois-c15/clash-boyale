@@ -1,5 +1,6 @@
 from entite import Entite, Equipe
 from entite.unite import Unite
+from grille import Grille
 
 import pygame
 
@@ -13,6 +14,7 @@ is_running = True
 EQUIPE_1 = Equipe("Equipe 1", pygame.Color(255, 0, 0))
 EQUIPE_2 = Equipe("Equipe 2", pygame.Color(0, 0, 255))
 
+grille = Grille()
 entites: list[Entite] = []
 
 
@@ -28,6 +30,7 @@ def start():
 
 
 def update(t: float):
+    grille.dessiner(screen)
     for entite in entites:
         if not entite.est_vivant():
             entites.remove(entite)

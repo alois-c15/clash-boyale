@@ -3,10 +3,13 @@ from dataclasses import dataclass
 
 import pygame
 
-@dataclass
+@dataclass(frozen=True)
 class Equipe:
     nom: str
     couleur: Color
+
+    def __hash__(self) -> int:
+        return hash((self.nom, tuple(self.couleur)))
 
 
 class Entite:

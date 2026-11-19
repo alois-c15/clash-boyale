@@ -57,4 +57,6 @@ class Unite(Entite):
             self.en_attaque = False
 
     def dessiner(self, surface: Surface) -> None:
+        self._dessiner_vie(surface)
         pygame.draw.circle(surface, self.equipe.couleur, self.position, self.taille // 2)
+

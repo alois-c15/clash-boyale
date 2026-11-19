@@ -17,10 +17,14 @@ entites: list[Entite] = []
 
 
 def start():
-    unite = Unite(EQUIPE_1, 35, 45)
-    unite.position = pygame.Vector2(273, 173)
+    unite_1 = Unite(equipe=EQUIPE_1, taille=35, pv_max=100, vitesse=85, degats=25, portee=15, duree_attaque=1.35)
+    unite_1.position = pygame.Vector2(400, 360)
 
-    entites.append(unite)
+    unite_2 = Unite(equipe=EQUIPE_2, taille=35, pv_max=100, vitesse=85, degats=25, portee=15, duree_attaque=1.35)
+    unite_2.position = pygame.Vector2(880, 360)
+
+    entites.append(unite_1)
+    entites.append(unite_2)
 
 
 def update(t: float):

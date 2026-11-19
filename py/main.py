@@ -1,5 +1,5 @@
+from entite import Entite, Equipe
 from entite.unite import Unite
-from entite import Entite
 
 import pygame
 
@@ -10,11 +10,14 @@ screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 is_running = True
 
+EQUIPE_1 = Equipe("Equipe 1", pygame.Color(255, 0, 0))
+EQUIPE_2 = Equipe("Equipe 2", pygame.Color(0, 0, 255))
+
 entites: list[Entite] = []
 
 
 def start():
-    unite = Unite(35, 45)
+    unite = Unite(EQUIPE_1, 35, 45)
     unite.position = pygame.Vector2(273, 173)
 
     entites.append(unite)

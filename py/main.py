@@ -1,3 +1,6 @@
+from entite.unite import Unite
+from entite import Entite
+
 import pygame
 
 pygame.init()
@@ -7,12 +10,30 @@ screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 is_running = True
 
+entites: list[Entite] = []
+
 
 def start():
-    pass
+    unite = Unite(35, 45)
+    unite.position = pygame.Vector2(273, 173)
+
+    entites.append(unite)
+
 
 def update(t: float):
-    pass
+    for entite in entites:
+        if isinstance(entite, Unite):
+            update_unite(entite, t)
+
+        entite.dessiner(screen)
+
+
+def update_unite(unite: Unite, t: float):
+    if not unite.cible:
+        unite.update_ciblage(entites)
+        return
+    unite.update_attaque(t)
+
 
 def on_event(e: pygame.event.Event):
     global is_running
@@ -20,6 +41,7 @@ def on_event(e: pygame.event.Event):
     if e.type == pygame.QUIT:
         is_running = False
 
+start()
 while is_running:
     for e in pygame.event.get():
         on_event(e)

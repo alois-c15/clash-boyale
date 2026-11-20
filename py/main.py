@@ -15,7 +15,7 @@ is_running = True
 EQUIPE_1 = Equipe("Equipe 1", pygame.Color(255, 0, 0))
 EQUIPE_2 = Equipe("Equipe 2", pygame.Color(0, 0, 255))
 
-grille = Grille()
+grille = Grille(EQUIPE_1, EQUIPE_2)
 entites: list[Entite] = []
 
 tour_equipe_1: Emplacement | None = None
@@ -48,22 +48,15 @@ def start():
     ajouter_entite(tour_equipe_1)
     ajouter_entite(tour_equipe_2)
 
-    unite_1 = Unite(equipe=EQUIPE_1, taille=TAILLE_PETIT, pv_max=100, vitesse=85, degats=25, portee=15, duree_attaque=1.35)
-    unite_1.position = pygame.Vector2(400, 360)
-
-    unite_2 = Unite(equipe=EQUIPE_2, taille=TAILLE_PETIT, pv_max=100, vitesse=85, degats=25, portee=15, duree_attaque=1.35)
-    unite_2.position = pygame.Vector2(880, 360)
-
-    ajouter_entite(unite_1)
-    ajouter_entite(unite_2)
-
 
 def update(t: float):
     grille.dessiner(screen)
+    grille.update()
+
     for entite in entites:
         if not entite.est_vivant():
             retirer_entite(entite)
-            
+
             del entite
             continue
 
@@ -85,6 +78,20 @@ def on_event(e: pygame.event.Event):
 
     if e.type == pygame.QUIT:
         is_running = False
+    elif e.type == pygame.MOUSEBUTTONDOWN:
+        if e.button == 1:
+            grille.boutton_souris_actif = True
+    elif e.type == pygame.MOUSEBUTTONUP:
+        if e.button == 1:
+            grille.boutton_souris_actif = False
+
+            active = pygame.Vector2(grille.case_active.x * grille.TAILLE_CASE + grille.TAILLE_CASE // 2, grille.case_active.y * grille.TAILLE_CASE + grille.TAILLE_CASE // 2)
+            equipe = EQUIPE_1 if grille.get_cote(int(grille.case_active.x)) == -1 else EQUIPE_2
+
+            unite = Unite(equipe=equipe, taille=TAILLE_PETIT, pv_max=100, vitesse=85, degats=25, portee=15, duree_attaque=1.35)
+            unite.position = active
+
+            ajouter_entite(unite)
 
 
 start()

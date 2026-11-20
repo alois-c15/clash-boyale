@@ -53,10 +53,39 @@ class Unite(Entite):
                 or self.distance_to(self.cible) > self.portee):
                 return
 
-            self.cible.prendre_degats(self.degats)
+            self.cible.prendre_degats(self.degats, self)
             self.en_attaque = False
+
+            if not self.cible.est_vivant():
+                self.cible = None
+
+    def on_entite_ajoutee(self, entite: Entite) -> None:
+        if entite == self.cible: return
+
+        if not self.cible:
+            self.cible = entite
+            return
+
+        if self.distance_to(entite) < self.distance_to(self.cible):
+            self.cible = entite
+
+    def on_entite_retiree(self, entite: Entite) -> None:
+        if entite == self.cible:
+            self.cible = None
+
+    def prendre_degats(self, degats: int, origine: Entite) -> None:
+        super().prendre_degats(degats, origine)
+
+        if origine == self.cible: return
+        if not self.cible:
+            self.cible = origine
+            return
+
+        if (self.distance_to(origine) < self.distance_to(self.cible) 
+            and origine.taille >= self.cible.taille):
+            self.cible = origine
 
     def dessiner(self, surface: Surface) -> None:
         self._dessiner_vie(surface)
-        pygame.draw.circle(surface, self.equipe.couleur, self.position, self.taille // 2)
+        pygame.draw.circle(surface, self.equipe.couleur, self.position, (self.taille - 5) // 2)
 

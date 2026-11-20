@@ -31,7 +31,7 @@ class Entite:
     def pv(self, valeur: int) -> None:
         self._pv = max(0, min(valeur, self.pv_max))
 
-    def prendre_degats(self, degats: int) -> None:
+    def prendre_degats(self, degats: int, origine: "Entite") -> None:
         self.pv -= degats
 
     def est_vivant(self) -> bool:

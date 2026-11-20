@@ -19,9 +19,6 @@ entites: list[Entite] = []
 
 
 def start():
-    grille.creer_curseur(EQUIPE_1, GAUCHE, pygame.Vector2(4, grille.HAUTEUR // 2))
-    grille.creer_curseur(EQUIPE_2, DROITE, pygame.Vector2(grille.LARGEUR - 5, grille.HAUTEUR // 2))
-
     unite_1 = Unite(equipe=EQUIPE_1, taille=35, pv_max=100, vitesse=85, degats=25, portee=15, duree_attaque=1.35)
     unite_1.position = pygame.Vector2(400, 360)
 
@@ -58,24 +55,7 @@ def on_event(e: pygame.event.Event):
 
     if e.type == pygame.QUIT:
         is_running = False
-    elif e.type == pygame.KEYDOWN:
-        if e.key == pygame.K_z:
-            grille.deplacer_curseur(EQUIPE_1, HAUT)
-        elif e.key == pygame.K_s:
-            grille.deplacer_curseur(EQUIPE_1, BAS)
-        elif e.key == pygame.K_q:
-            grille.deplacer_curseur(EQUIPE_1, GAUCHE)
-        elif e.key == pygame.K_d:
-            grille.deplacer_curseur(EQUIPE_1, DROITE)
 
-        if e.key == pygame.K_i:
-            grille.deplacer_curseur(EQUIPE_2, HAUT)
-        elif e.key == pygame.K_k:
-            grille.deplacer_curseur(EQUIPE_2, BAS)
-        elif e.key == pygame.K_j:
-            grille.deplacer_curseur(EQUIPE_2, GAUCHE)
-        elif e.key == pygame.K_l:
-            grille.deplacer_curseur(EQUIPE_2, DROITE)
 
 start()
 while is_running:

@@ -1,5 +1,6 @@
-from grille import Grille, HAUT, BAS, GAUCHE, DROITE
+from grille import Grille, HAUT, BAS, GAUCHE, DROITE, TAILLE_PETIT, TAILLE_GRAND
 from entite import Entite, Equipe
+from entite.emplacement import Emplacement
 from entite.unite import Unite
 
 import pygame
@@ -17,12 +18,25 @@ EQUIPE_2 = Equipe("Equipe 2", pygame.Color(0, 0, 255))
 grille = Grille()
 entites: list[Entite] = []
 
+tour_equipe_1: Emplacement | None = None
+tour_equipe_2: Emplacement | None = None
 
 def start():
-    unite_1 = Unite(equipe=EQUIPE_1, taille=35, pv_max=100, vitesse=85, degats=25, portee=15, duree_attaque=1.35)
+    global tour_equipe_1, tour_equipe_2
+
+    tour_equipe_1 = Emplacement(equipe=EQUIPE_1, taille=TAILLE_GRAND + 5, pv_max=700)
+    tour_equipe_1.position = pygame.Vector2(80 + TAILLE_GRAND // 2, 360)
+
+    tour_equipe_2 = Emplacement(equipe=EQUIPE_2, taille=TAILLE_GRAND + 5, pv_max=700)
+    tour_equipe_2.position = pygame.Vector2(1200 - TAILLE_GRAND // 2, 360)
+
+    entites.append(tour_equipe_1)
+    entites.append(tour_equipe_2)
+
+    unite_1 = Unite(equipe=EQUIPE_1, taille=TAILLE_PETIT, pv_max=100, vitesse=85, degats=25, portee=15, duree_attaque=1.35)
     unite_1.position = pygame.Vector2(400, 360)
 
-    unite_2 = Unite(equipe=EQUIPE_2, taille=35, pv_max=100, vitesse=85, degats=25, portee=15, duree_attaque=1.35)
+    unite_2 = Unite(equipe=EQUIPE_2, taille=TAILLE_PETIT, pv_max=100, vitesse=85, degats=25, portee=15, duree_attaque=1.35)
     unite_2.position = pygame.Vector2(880, 360)
 
     entites.append(unite_1)

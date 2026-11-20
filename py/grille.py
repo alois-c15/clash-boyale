@@ -14,23 +14,6 @@ def get_couleur(x: int, y: int) -> Color:
     return Color(0, 230, 0)
 
 
-class Curseur:
-    def __init__(self, equipe: Equipe, cote: int) -> None:
-        self.equipe = equipe
-        self.cote = cote
-
-        self._position = Vector2(0, 0)
-
-    @property
-    def position(self) -> Vector2:
-        return self._position
-
-    @position.setter
-    def position(self, nouveau: Vector2) -> None:
-        self._position.x = int(nouveau.x)
-        self._position.y = int(nouveau.y)
-
-
 class Grille:
     LARGEUR: int = 32
     HAUTEUR: int = 18
@@ -46,3 +29,7 @@ class Grille:
                 rect = pygame.Rect(x * taille, y * taille, taille, taille)
 
                 pygame.draw.rect(surface, couleur, rect)
+
+TAILLE_PETIT: int = Grille.TAILLE_CASE * 1
+TAILLE_MOYEN: int = Grille.TAILLE_CASE * 2
+TAILLE_GRAND: int = Grille.TAILLE_CASE * 3
